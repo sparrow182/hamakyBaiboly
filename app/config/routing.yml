@@ -1,0 +1,9 @@
+defi_manager:
+    resource: "@DefiManagerBundle/Resources/config/routing.yml"
+    prefix:   /manager
+
+defi_page:
+    resource: "@DefiPageBundle/Resources/config/routing.yml"
+    prefix:   /
+
+

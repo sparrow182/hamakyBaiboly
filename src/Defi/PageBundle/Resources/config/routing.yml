@@ -1,0 +1,7 @@
+defi_page_homepage:
+    path:     /
+    defaults: { _controller: DefiPageBundle:Main:index }
+
+defi_page_search_results:
+    path:     /page/results
+    defaults: { _controller: DefiPageBundle:Main:searchResults }
