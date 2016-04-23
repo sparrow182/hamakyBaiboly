@@ -27,7 +27,7 @@ class BibleSearchType extends AbstractType {
             ))
             ->add('book', EntityType::class, array(
                 'class' => 'DefiCommonBundle:Book',
-                'choice_label' => 'name'
+                'choice_label' => 'nameMg'
             ))
             ->add('chapter', NumberType::class)
             ->add('verseStart', NumberType::class)

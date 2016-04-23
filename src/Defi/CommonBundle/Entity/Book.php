@@ -26,7 +26,7 @@ class Book
      *
      * @ORM\Column(name="name_mg", type="string", length=255)
      */
-    private $name;
+    private $nameMg;
 
     /**
      * @var int
@@ -66,29 +66,7 @@ class Book
         return $this->id;
     }
 
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Book
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
+    
 
     /**
      * Set nameFr
@@ -174,4 +152,28 @@ class Book
         return $this->part;
     }
 
+
+    /**
+     * Set nameMg
+     *
+     * @param string $nameMg
+     *
+     * @return Book
+     */
+    public function setNameMg($nameMg)
+    {
+        $this->nameMg = $nameMg;
+
+        return $this;
+    }
+
+    /**
+     * Get nameMg
+     *
+     * @return string
+     */
+    public function getNameMg()
+    {
+        return $this->nameMg;
+    }
 }
