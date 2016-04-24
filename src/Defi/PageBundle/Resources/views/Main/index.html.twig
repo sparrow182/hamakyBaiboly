@@ -1,8 +1,9 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
+
     {{ form(formSearch) }}
-    
+
     <section>
         {% if searchResults is defined and searchResults | length > 0 %}
             <h2>{{ 'search.result' | trans }}</h2>
@@ -11,9 +12,9 @@
             {% endfor %}
         {% endif %}
     </section>
-    
+
 {% endblock %}
 
 {% block javascripts %}
-    
+
 {% endblock %}

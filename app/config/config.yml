@@ -70,6 +70,12 @@ swiftmailer:
 #Lucene search
 ivory_lucene_search:
     # Index identifier
-    indentifier1:
+    content:
         # Path to store the index (Required)
-        path: '%kernel.root_dir%/lucene/index'
+        path: '%kernel.root_dir%/lucene/content-index'
+        
+    # Index identifier
+    contentTest:
+        # Path to store the index (Required)
+        path: '%kernel.root_dir%/lucene/content-test'
+        analyzer: ZendSearch\Lucene\Analysis\Analyzer\Common\TextNum\CaseInsensitive

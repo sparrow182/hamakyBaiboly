@@ -16,9 +16,7 @@ class MainController extends Controller
      */
     public function indexAction(Request $request)
     {
-        
         $formSearch = $this->get('form.factory')->create(BibleSearchType::class);
-        
         $formSearch->handleRequest($request);
         $searchResults = array();
         
@@ -32,8 +30,9 @@ class MainController extends Controller
             $verseEnd = $data['verseEnd'];
             $translationId = $data['translation']->getId();
             $translationId = 3;
+            $freeSearch = $data['freeSearch'];
             
-            $searchResults = $searchManager->searchContent($bookId, $chapter, $verseStart, $verseEnd, $translationId);
+            $searchResults = $searchManager->searchContent($bookId, $chapter, $verseStart, $verseEnd, $translationId, $freeSearch);
         }
         
         return $this->render('DefiPageBundle:Main:index.html.twig', array(
