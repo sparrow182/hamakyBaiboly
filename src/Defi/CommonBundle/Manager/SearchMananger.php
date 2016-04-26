@@ -64,8 +64,13 @@ class SearchMananger {
             $subquery1->addTerm(new \ZendSearch\Lucene\Index\Term($bookId, 'bookId'), true);
         }
         
-        if ($verseStart) {
+        if ($verseStart && !$verseEnd) {
             $subquery1->addTerm(new \ZendSearch\Lucene\Index\Term($verseStart, 'verse'), true);
+        } else if ($verseStart && $verseEnd) {
+            $from = new \ZendSearch\Lucene\Index\Term($verseStart, 'verse');
+            $to   = new \ZendSearch\Lucene\Index\Term($verseEnd, 'verse');
+            $subquery3 = new \ZendSearch\Lucene\Search\Query\Range($from, $to, true);
+            $query->addSubquery($subquery3, true);
         }
         
         $tokenizedText = $this->tokenize($freeSearch);

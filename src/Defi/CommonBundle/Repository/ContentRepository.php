@@ -25,11 +25,19 @@ class ContentRepository extends \Doctrine\ORM\EntityRepository
         $qb
             ->select('c')
             ->from('DefiCommonBundle:Content', 'c')
-            ->where($qb->expr()->eq('c.book', $bookId))
-            ->andWhere($qb->expr()->eq('c.chapter', $chapter))
-            ->andWhere($qb->expr()->between('c.verse', $verseStart, $verseEnd))
-            ->andWhere($qb->expr()->eq('c.translation', $translationId));
+            ->where($qb->expr()->eq('c.book', $bookId));
         
+        if ($chapter) {
+            $qb->andWhere($qb->expr()->eq('c.chapter', $chapter));
+        }
+        
+        if ($verseStart && !$verseEnd) {
+            $qb->andWhere($qb->expr()->eq('c.verse', $verseStart));
+        } else if ($verseStart && $verseEnd) {
+            $qb->andWhere($qb->expr()->between('c.verse', $verseStart, $verseEnd));
+        }
+        
+        $qb->andWhere($qb->expr()->eq('c.translation', $translationId));
         $query = $qb->getQuery();
         
         return $query->getResult();
