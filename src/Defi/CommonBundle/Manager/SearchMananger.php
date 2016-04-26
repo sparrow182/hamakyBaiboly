@@ -49,7 +49,7 @@ class SearchMananger {
      * @param type $freeSearch
      */
     public function searchInLuceneIndex($freeSearch, $bookId, $chapter, $verseStart, $verseEnd, $translationId = 3) {
-        // TODO
+        
         
         return null;
     }
