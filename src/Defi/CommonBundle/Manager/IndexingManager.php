@@ -28,4 +28,10 @@ class IndexingManager {
         
     }
     
+    public function stripPunctuation ($text) {
+        $striped = preg_replace("/[^a-zA-Z 0-9]+/", " ", $text);
+        
+        return $striped;
+    }
+    
 }

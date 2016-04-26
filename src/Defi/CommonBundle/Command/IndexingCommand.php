@@ -46,7 +46,6 @@ class IndexingCommand extends ContainerAwareCommand {
         $progress->start();
 
         foreach ($contentsToIndex as $content) {
-            var_dump($content->getText());
             // Create a new document
             $document = new Document();
             $document->addField(Field::keyword('contentId', $content->getId()));
@@ -55,7 +54,10 @@ class IndexingCommand extends ContainerAwareCommand {
             $document->addField(Field::keyword('translationId', $content->getTranslation()->getId()));
             $document->addField(Field::keyword('chapter', $content->getChapter()));
             $document->addField(Field::keyword('verse', $content->getVerse()));
-            $document->addField(Field::text('text', $content->getText()));
+            $text = $content->getText();
+            $document->addField(Field::unIndexed('text', $text));
+            $optimizedText = $indexingManager->stripPunctuation($text);
+            $document->addField(Field::text('optimizedText', $optimizedText));
             $index->addDocument($document);
             $index->commit();
 

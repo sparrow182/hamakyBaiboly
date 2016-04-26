@@ -34,10 +34,11 @@ class MainController extends Controller
             
             $searchResults = $searchManager->searchContent($bookId, $chapter, $verseStart, $verseEnd, $translationId, $freeSearch);
         }
-        
+            
         return $this->render('DefiPageBundle:Main:index.html.twig', array(
             'formSearch' => $formSearch->createView(),
-            'searchResults' => $searchResults
+            'searchResults' => $searchResults,
+            'formData' => $formSearch->getData()
         ));
     }
     

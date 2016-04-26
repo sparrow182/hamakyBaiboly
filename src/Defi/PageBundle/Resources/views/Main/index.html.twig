@@ -7,8 +7,11 @@
     <section>
         {% if searchResults is defined and searchResults | length > 0 %}
             <h2>{{ 'search.result' | trans }}</h2>
+            
+            <h3>{{ 'search.book' | trans }} : {{ formData.book.nameMg }}</h3>
+            
             {% for content in searchResults %}
-                <p><strong>{{ content.verse }}.</strong> {{ content.text }}</p>
+                <p><strong>{{ content.chapter }}</strong>-<strong>{{ content.verse }}.</strong> {{ content.text }}</p>
             {% endfor %}
         {% endif %}
     </section>

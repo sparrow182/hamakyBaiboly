@@ -3,6 +3,8 @@
 namespace Defi\CommonBundle\Manager;
 
 use Symfony\Component\DependencyInjection\ContainerInterface as Container;
+use ZendSearch\Lucene\Document;
+use ZendSearch\Lucene\Document\Field;
 
 /**
  * SearchMananger
@@ -29,10 +31,11 @@ class SearchMananger {
      */
     public function searchContent($bookId, $chapter, $verseStart, $verseEnd, $translationId = 3, $freeSearch = "") {
         $contentRepository = $this->em->getRepository('DefiCommonBundle:Content');
-        $searchResults = $contentRepository->findContent($bookId, $chapter, $verseStart, $verseEnd, $translationId);
 
         if (!empty($freeSearch)) {
-            $searchResults = $this->searchInLuceneIndex($bookId, $chapter, $verseStart, $verseEnd, $translationId, $freeSearch);
+            $searchResults = $this->searchInLuceneIndex($freeSearch, $bookId, $chapter, $verseStart, $verseEnd, $translationId);
+        } else {
+            $searchResults = $contentRepository->findContent($bookId, $chapter, $verseStart, $verseEnd, $translationId);
         }
 
         return $searchResults;
@@ -48,10 +51,43 @@ class SearchMananger {
      * @param type $translationId
      * @param type $freeSearch
      */
-    public function searchInLuceneIndex($freeSearch, $bookId, $chapter, $verseStart, $verseEnd, $translationId = 3) {
+    public function searchInLuceneIndex($freeSearch, $bookId = null, $chapter = null, $verseStart = null, $verseEnd = null, $translationId = 3) {
+        $query = new \ZendSearch\Lucene\Search\Query\Boolean();
         
+        $subquery1 = new \ZendSearch\Lucene\Search\Query\MultiTerm();
         
-        return null;
+        if ($translationId) {
+            $subquery1->addTerm(new \ZendSearch\Lucene\Index\Term($translationId, 'translationId'), true);
+        }
+        
+        if ($bookId) {
+            $subquery1->addTerm(new \ZendSearch\Lucene\Index\Term($bookId, 'bookId'), true);
+        }
+        
+        if ($verseStart) {
+            $subquery1->addTerm(new \ZendSearch\Lucene\Index\Term($verseStart, 'verse'), true);
+        }
+        
+        $tokenizedText = $this->tokenize($freeSearch);
+        $subquery2 = new \ZendSearch\Lucene\Search\Query\Phrase($tokenizedText, null, 'optimizedText');
+        $subquery2->setSlop(30);
+        $query->addSubquery($subquery1, true);
+        $query->addSubquery($subquery2, true);
+        $hits = $this->container->get('ivory_lucene_search')->getIndex('contentTest')->find($query);
+        $contentIds = array();
+        
+        foreach ($hits as $hit) {
+            $contentIds[] = $hit->contentId ;
+        }
+        
+        $searchResults = array();
+        
+        if (count($contentIds) > 0) {
+            $contentRepository = $this->em->getRepository('DefiCommonBundle:Content');
+            $searchResults = $contentRepository->findContentByIds($contentIds);
+        }
+        
+        return $searchResults;
     }
 
     /**
@@ -60,6 +96,7 @@ class SearchMananger {
      */
     public function getAllContents($translationId = 3) {
         $contentRepository = $this->em->getRepository('DefiCommonBundle:Content');
+        
         $results = $contentRepository->findByTranslation($translationId, array('book' => 'asc'), 10);
         
         return $results;
@@ -73,6 +110,7 @@ class SearchMananger {
      * @param type $minTextLength
      */
     public function tokenize($text, $minTextLength = 3) {
+        $text = preg_replace("/[^a-zA-Z 0-9]+/", " ", $text);
         $tokens = explode(" ", $text);
         $results = array();
         
