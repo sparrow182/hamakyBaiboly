@@ -54,6 +54,8 @@ class IndexingCommand extends ContainerAwareCommand {
             $document->addField(Field::keyword('translationId', $content->getTranslation()->getId()));
             $document->addField(Field::keyword('chapter', $content->getChapter()));
             $document->addField(Field::keyword('verse', $content->getVerse()));
+            $verseIdx = $indexingManager->numberToLetter($content->getVerse());
+            $document->addField(Field::keyword('verseIdx', $verseIdx));
             $text = $content->getText();
             $document->addField(Field::unIndexed('text', $text));
             $optimizedText = $indexingManager->stripPunctuation($text);

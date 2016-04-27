@@ -66,16 +66,19 @@ class SearchMananger {
         
         if ($verseStart && !$verseEnd) {
             $subquery1->addTerm(new \ZendSearch\Lucene\Index\Term($verseStart, 'verse'), true);
-        } else if ($verseStart && $verseEnd) {
-            $from = new \ZendSearch\Lucene\Index\Term($verseStart, 'verse');
-            $to   = new \ZendSearch\Lucene\Index\Term($verseEnd, 'verse');
-            $subquery3 = new \ZendSearch\Lucene\Search\Query\Range($from, $to, true);
-            $query->addSubquery($subquery3, true);
+        } else if ($verseEnd && $verseStart) {
+            $indexingManger = new IndexingManager($this->container);
+            $verseStartIdx = $indexingManger->numberToLetter($verseStart);
+            $verseEndIdx = $indexingManger->numberToLetter($verseEnd);
+            $from = new \ZendSearch\Lucene\Index\Term($verseStartIdx, 'verseIdx');
+            $to = new \ZendSearch\Lucene\Index\Term($verseEndIdx, 'verseIdx');
+            $queryRange = new \ZendSearch\Lucene\Search\Query\Range($from, $to, true);
+            $query->addSubquery($queryRange, true);
         }
         
         $tokenizedText = $this->tokenize($freeSearch);
         $subquery2 = new \ZendSearch\Lucene\Search\Query\Phrase($tokenizedText, null, 'optimizedText');
-        $subquery2->setSlop(30);
+        $subquery2->setSlop(50);
         $query->addSubquery($subquery1, true);
         $query->addSubquery($subquery2, true);
         $hits = $this->container->get('ivory_lucene_search')->getIndex('contentTest')->find($query);
@@ -102,7 +105,7 @@ class SearchMananger {
     public function getAllContents($translationId = 3) {
         $contentRepository = $this->em->getRepository('DefiCommonBundle:Content');
         
-        $results = $contentRepository->findByTranslation($translationId, array('book' => 'asc'), 10);
+        $results = $contentRepository->findByTranslation($translationId, array('book' => 'asc'), 100);
         
         return $results;
     }
@@ -130,4 +133,5 @@ class SearchMananger {
         
         return $results;
     }
+    
 }
