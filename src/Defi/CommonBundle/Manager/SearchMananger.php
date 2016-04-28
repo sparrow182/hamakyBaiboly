@@ -60,13 +60,14 @@ class SearchMananger {
             $subquery1->addTerm(new \ZendSearch\Lucene\Index\Term($translationId, 'translationId'), true);
         }
         
+        if ($bookId) {
+            $subquery1->addTerm(new \ZendSearch\Lucene\Index\Term($bookId, 'bookId'), true);
+        }
+        
         if ($chapter) {
             $subquery1->addTerm(new \ZendSearch\Lucene\Index\Term($chapter, 'chapter'), true);
         }
         
-        if ($bookId) {
-            $subquery1->addTerm(new \ZendSearch\Lucene\Index\Term($bookId, 'bookId'), true);
-        }
         
         if ($verseStart && !$verseEnd) {
             $subquery1->addTerm(new \ZendSearch\Lucene\Index\Term($verseStart, 'verse'), true);
@@ -109,7 +110,7 @@ class SearchMananger {
     public function getAllContents($translationId = 3) {
         $contentRepository = $this->em->getRepository('DefiCommonBundle:Content');
         
-        $results = $contentRepository->findByTranslation($translationId, array('book' => 'asc'), 100);
+        $results = $contentRepository->findByTranslation($translationId, array('book' => 'asc'));
         
         return $results;
     }

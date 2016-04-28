@@ -1,12 +1,27 @@
+// IIFE - Immediately Invoked Function Expression
+(function (yourcode) {
 
-  function getBooksByTranslation(personid) {
-    var dynamicData = {};
-    dynamicData["id"] = personID;
-    return $.ajax({
-      url: "getName.php",
-      type: "get",
-      data: dynamicData
+    // The global jQuery object is passed as a parameter
+    yourcode(window.jQuery, window, document);
+
+}(function ($, window, document) {
+
+    // The $ is now locally scoped 
+    // Listen for the jQuery ready event on the document
+    $(function () {
+
     });
-  }
 
+    // The rest of the code goes here!
+    function loadBookByTranslation(translationId, targetURL) {
+        var dynamicData = {};
+        dynamicData["tranlationId"] = translationId;
+        return $.ajax({
+            url: targetURL,
+            type: "get",
+            data: dynamicData
+        });
+    }
+
+}));
 

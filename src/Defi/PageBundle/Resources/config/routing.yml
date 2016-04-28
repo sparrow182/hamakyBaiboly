@@ -5,3 +5,7 @@ defi_page_homepage:
 defi_page_search_results:
     path:     /page/results
     defaults: { _controller: DefiPageBundle:Main:searchResults }
+    
+defi_page_ajax_load_chapters_by_book:
+    path : /book/{bookId}/chapters
+    defaults: { _controller: DefiPageBundle:Ajax:loadingChaptersByBook }

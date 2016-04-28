@@ -7,9 +7,9 @@
     <section>
         {% if searchResults is defined and searchResults | length > 0 %}
             <h2>{{ 'search.result' | trans }}</h2>
-            
-            <h3>{{ 'search.book' | trans }} : {{ formData.book.nameMg }}</h3>
-            
+
+            <h3>{{ 'search.book' | trans }} : {{ formData.book ? formData.book.nameMg : "" }}</h3>
+
             {% for content in searchResults %}
                 <p><strong>{{ content.chapter }}</strong>-<strong>{{ content.verse }}.</strong> {{ content.text }}</p>
             {% endfor %}
@@ -19,5 +19,29 @@
 {% endblock %}
 
 {% block javascripts %}
-    
+    {{ parent() }}
+
+    <script>
+        $(function () {
+            // The rest of the code goes here!
+            function loadChaptersByBook(targetURL) {
+                
+                return $.ajax({
+                    url: targetURL,
+                    type: "get",
+                });
+            }
+
+            $('#bible_search_book').change(function (e) {
+                var path = '{{ path('defi_page_ajax_load_chapters_by_book', { bookId : 'bid' }) }}';
+                path = path.replace('bid', $(this).val());
+
+                loadChaptersByBook(path).done(function (data) {
+                    $('#bible_search_chapter').html(data);
+                });
+            });
+
+        });
+    </script>
+
 {% endblock %}

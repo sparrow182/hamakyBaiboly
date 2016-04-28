@@ -38,7 +38,7 @@ class IndexingCommand extends ContainerAwareCommand {
         // Request an index
         $index = $this->getContainer()->get('ivory_lucene_search')->getIndex('content');
         
-        $commitSize = 100;
+        $commitSize = 2000;
         $counter = 1;
         // create a new progress bar (50 units)
         $progress = new ProgressBar($output, count($contentsToIndex));
@@ -62,7 +62,11 @@ class IndexingCommand extends ContainerAwareCommand {
             $document->addField(Field::text('optimizedText', $optimizedText));
             $index->addDocument($document);
             $index->commit();
-
+            
+            if ($counter % $commitSize == 0) {
+                $index->optimize();
+            }
+            
             // advance the progress bar 1 unit
             $progress->advance();
         }
