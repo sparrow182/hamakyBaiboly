@@ -73,6 +73,7 @@ ivory_lucene_search:
     content:
         # Path to store the index (Required)
         path: '%kernel.root_dir%/lucene/content-index'
+        analyzer: ZendSearch\Lucene\Analysis\Analyzer\Common\TextNum\CaseInsensitive
         
     # Index identifier
     contentTest:

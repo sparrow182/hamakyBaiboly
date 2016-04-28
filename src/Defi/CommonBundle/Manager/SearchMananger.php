@@ -60,6 +60,10 @@ class SearchMananger {
             $subquery1->addTerm(new \ZendSearch\Lucene\Index\Term($translationId, 'translationId'), true);
         }
         
+        if ($chapter) {
+            $subquery1->addTerm(new \ZendSearch\Lucene\Index\Term($chapter, 'chapter'), true);
+        }
+        
         if ($bookId) {
             $subquery1->addTerm(new \ZendSearch\Lucene\Index\Term($bookId, 'bookId'), true);
         }
@@ -81,7 +85,7 @@ class SearchMananger {
         $subquery2->setSlop(50);
         $query->addSubquery($subquery1, true);
         $query->addSubquery($subquery2, true);
-        $hits = $this->container->get('ivory_lucene_search')->getIndex('contentTest')->find($query);
+        $hits = $this->container->get('ivory_lucene_search')->getIndex('content')->find($query);
         $contentIds = array();
         
         foreach ($hits as $hit) {

@@ -34,9 +34,9 @@ class IndexingCommand extends ContainerAwareCommand {
         $output->writeln("Indexing contents ...");
         $indexingManager = new \Defi\CommonBundle\Manager\IndexingManager($container);
         $luceneSearch = $this->getContainer()->get('ivory_lucene_search');
-        $luceneSearch->eraseIndex("contentTest");
+        $luceneSearch->eraseIndex("content");
         // Request an index
-        $index = $this->getContainer()->get('ivory_lucene_search')->getIndex('contentTest');
+        $index = $this->getContainer()->get('ivory_lucene_search')->getIndex('content');
         
         $commitSize = 100;
         $counter = 1;
@@ -67,7 +67,6 @@ class IndexingCommand extends ContainerAwareCommand {
             $progress->advance();
         }
 
-        $index->optimize();
         // ensure that the progress bar is at 100%
         $progress->finish();
 
