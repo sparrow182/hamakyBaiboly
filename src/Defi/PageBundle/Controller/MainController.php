@@ -24,7 +24,7 @@ class MainController extends Controller
             // Searching ...
             $data = $formSearch->getData();
             $searchManager = new \Defi\CommonBundle\Manager\SearchMananger($this->container);
-            $bookId = $data['book']->getId();
+            $bookId = $data['book'] ? $data['book']->getId() : null;
             $chapter = $data['chapter'];
             $verseStart = $data['verseStart'];
             $verseEnd = $data['verseEnd'];

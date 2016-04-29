@@ -24,18 +24,20 @@ class BibleSearchType extends AbstractType {
             ->add('translation', EntityType::class, array(
                 'class' => 'DefiCommonBundle:Translation',
                 'choice_label' => 'title',
+                'required' => false
             ))
             ->add('book', EntityType::class, array(
                 'class' => 'DefiCommonBundle:Book',
-                'choice_label' => 'nameMg'
-            ))
-            ->add('chapter', NumberType::class, array(
+                'choice_label' => 'nameMg',
                 'required' => false
             ))
-            ->add('verseStart', NumberType::class, array(
+            ->add('chapter', ChoiceType::class, array(
                 'required' => false
             ))
-            ->add('verseEnd', NumberType::class, array(
+            ->add('verseStart', ChoiceType::class, array(
+                'required' => false
+            ))
+            ->add('verseEnd', ChoiceType::class, array(
                 'required' => false
             ))
             ->add('freeSearch', TextType::class, array(
