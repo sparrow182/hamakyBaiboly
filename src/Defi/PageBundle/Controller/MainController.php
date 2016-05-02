@@ -8,10 +8,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 class MainController extends Controller
 {
-    
+
     /**
      * Search subdivision, chapter and verse in bible
-     * 
+     *
      * @return type
      */
     public function indexAction(Request $request)
@@ -19,7 +19,7 @@ class MainController extends Controller
         $formSearch = $this->get('form.factory')->create(BibleSearchType::class);
         $formSearch->handleRequest($request);
         $searchResults = array();
-        
+
         if ($formSearch->isSubmitted() && $formSearch->isValid()) {
             // Searching ...
             $data = $formSearch->getData();
@@ -31,15 +31,14 @@ class MainController extends Controller
             $translationId = $data['translation']->getId();
             $translationId = 3;
             $freeSearch = $data['freeSearch'];
-            
             $searchResults = $searchManager->searchContent($bookId, $chapter, $verseStart, $verseEnd, $translationId, $freeSearch);
         }
-            
+
         return $this->render('DefiPageBundle:Main:index.html.twig', array(
-            'formSearch' => $formSearch->createView(),
-            'searchResults' => $searchResults,
-            'formData' => $formSearch->getData()
+                'formSearch' => $formSearch->createView(),
+                'searchResults' => $searchResults,
+                'formData' => $formSearch->getData()
         ));
     }
-    
+
 }
