@@ -22,8 +22,9 @@
     {{ parent() }}
 
     <script>
+        
         $(function () {
-            // The rest of the code goes here!
+            
             function loadChaptersByBook(targetURL) {
                 
                 return $.ajax({
@@ -33,12 +34,16 @@
             }
 
             $('#bible_search_book').change(function (e) {
-                var path = '{{ path('defi_page_ajax_load_chapters_by_book', { bookId : 'bid' }) }}';
-                path = path.replace('bid', $(this).val());
+                
+                if ($(this).val()) {
+                    var path = '{{ path('defi_page_ajax_load_chapters_by_book', { bookId : 'bid' }) }}';
+                    path = path.replace('bid', $(this).val());
 
-                loadChaptersByBook(path).done(function (data) {
-                    $('#bible_search_chapter').html(data);
-                });
+                    loadChaptersByBook(path).done(function (data) {
+                        $('#bible_search_chapter').html(data);
+                    });
+                }
+                
             });
 
         });
