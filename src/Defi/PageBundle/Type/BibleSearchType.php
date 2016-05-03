@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\Extension\Core\Type\RangeType;
 
 /**
  * Holy Bible search Form
@@ -43,12 +44,26 @@ class BibleSearchType extends AbstractType
         ));
 
         $formModifier = function(FormInterface $form, \Defi\CommonBundle\Entity\Book $book) {
-            $chapters = array(1, 2, 3, 4, 5);
+            $chapters = array();
 
-            $form->add('chapter', ChoiceType::class, array(
-                'required' => false,
-                'choices' => $chapters
-            ));
+            if ($book->getId()) {
+                $contentRepository = $this->em->getRepository('DefiCommonBundle:Content');
+                $upperBoundChapter = $contentRepository->getUpperBoundChapter($book->getId());
+
+                for ($i = 1; $i < $upperBoundChapter; $i++) {
+                    $chapters[$i] = $i;
+                }
+
+                $form->add('chapter', ChoiceType::class, array(
+                    'required' => false,
+                    'choices' => $chapters
+                ));
+            } else {
+                $form->add('chapter', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, array(
+                    'required' => false,
+                    'choices' => $chapters
+                ));
+            }
         };
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event) use ($formModifier) {
