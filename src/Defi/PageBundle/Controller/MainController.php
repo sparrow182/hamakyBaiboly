@@ -16,7 +16,8 @@ class MainController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $formSearch = $this->get('form.factory')->create(BibleSearchType::class);
+        $em = $this->container->get('doctrine.orm.entity_manager');
+        $formSearch = $this->get('form.factory')->create(new BibleSearchType($em));
         $formSearch->handleRequest($request);
         $searchResults = array();
 
@@ -26,9 +27,9 @@ class MainController extends Controller
             $searchManager = new \Defi\CommonBundle\Manager\SearchMananger($this->container);
             $bookId = $data['book'] ? $data['book']->getId() : null;
             $chapter = $data['chapter'];
-            $verseStart = $data['verseStart'];
-            $verseEnd = $data['verseEnd'];
-            $translationId = $data['translation']->getId();
+            $verseStart = isset($data['verseStart']) ? $data['verseStart'] : 1;
+            $verseEnd = isset($data['verseEnd']) ? $data['verseEnd'] : 1;
+            $translationId = isset($data['translation']) ? $data['translation']->getId() : 3;
             $translationId = 3;
             $freeSearch = $data['freeSearch'];
             $searchResults = $searchManager->searchContent($bookId, $chapter, $verseStart, $verseEnd, $translationId, $freeSearch);
