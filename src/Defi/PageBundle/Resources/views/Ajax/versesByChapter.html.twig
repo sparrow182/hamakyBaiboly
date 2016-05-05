@@ -1,0 +1,5 @@
+ <option value="">--</option>
+ {% set loopStart = verseStart ? verseStart : 1 %}
+{% for i in loopStart..upperBound %}
+    <option value="{{ i}}">{{ i}}</option>
+{% endfor %}

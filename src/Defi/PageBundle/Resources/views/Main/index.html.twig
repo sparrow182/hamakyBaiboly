@@ -1,19 +1,94 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    {{ form(formSearch) }}
     
+    {{ form_start(formSearch) }}
+        {{ form_row(formSearch.book) }}
+        {{ form_row(formSearch.chapter) }}
+        {{ form_row(formSearch.verseStart) }}
+        {{ form_row(formSearch.verseEnd) }}
+        {{ form_row(formSearch.freeSearch) }}
+    {{ form_end(formSearch) }}
+    
+    {{ form(formSearch) }}        {{ form_rest(formSearch) }}
+
+
     <section>
         {% if searchResults is defined and searchResults | length > 0 %}
             <h2>{{ 'search.result' | trans }}</h2>
+            
+            {% if formData.book is not empty %}
+                <h3>{{ 'search.book' | trans }} : {{ formData.book ? formData.book.nameMg : "" }}</h3>
+            {% endif %}
+
             {% for content in searchResults %}
-                <p><strong>{{ content.verse }}.</strong> {{ content.text }}</p>
+                <p><strong>{{ content.book.nameMg }} {{ content.chapter }}:</strong>{{ content.verse }}<strong>.</strong> {{ content.text }}</p>
             {% endfor %}
         {% endif %}
     </section>
-    
+
 {% endblock %}
 
 {% block javascripts %}
-    
+    {{ parent() }}
+
+    <script>
+        
+        $(function () {
+            
+            function loadAjaxContent(targetURL) {
+                
+                return $.ajax({
+                    url: targetURL,
+                    type: "get",
+                });
+            }
+
+            $('#bible_search_book').change(function (e) {
+                
+                if ($(this).val()) {
+                    var path = '{{ path('defi_page_ajax_load_chapters_by_book', { bookId : 'bid' }) }}';
+                    path = path.replace('bid', $(this).val());
+
+                    loadAjaxContent(path).done(function (data) {
+                        $('#bible_search_chapter').html(data);
+                    });
+                }
+            });
+            
+            $(document).on('change', '#bible_search_chapter', function(e){
+                var bookId = $('#bible_search_book').val();
+                
+                if ($(this).val() && bookId) {
+                    var path = '{{ path('defi_page_ajax_load_verses_by_chapter', { bookId : 'bid', chapterId : 'cid' }) }}';
+                    path = path.replace('bid', bookId).replace('cid', $(this).val());
+                    
+                    loadAjaxContent(path).done(function(data) {
+                        $('#bible_search_verseStart').html(data);
+                        $('#bible_search_verseEnd').empty();
+                        
+                    });
+                }
+                
+            });
+            
+            $(document).on('change', '#bible_search_verseStart', function(e){
+                var bookId = $('#bible_search_book').val();
+                var chapterId = $('#bible_search_chapter').val();
+                var verseStart = $(this).val();
+                
+                if (verseStart && chapterId && bookId) {
+                    var path = '{{ path('defi_page_ajax_load_verses_by_chapter', { bookId : 'bid', chapterId : 'cid', verseStart : 'start' }) }}';
+                    path = path.replace('bid', bookId).replace('cid', chapterId).replace('start', verseStart);
+                    
+                    loadAjaxContent(path).done(function(data) {
+                        $('#bible_search_verseEnd').html(data);
+                    });
+                }
+                
+            });
+
+        });
+    </script>
+
 {% endblock %}

@@ -10,4 +10,6 @@ namespace Defi\CommonBundle\Repository;
  */
 class BookRepository extends \Doctrine\ORM\EntityRepository
 {
+    
+    
 }

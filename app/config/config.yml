@@ -8,7 +8,7 @@ imports:
 # Put parameters here that don't need to change on each machine where the app is deployed
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    locale: en
+    locale: mg
 
 framework:
     #esi:             ~
@@ -70,6 +70,13 @@ swiftmailer:
 #Lucene search
 ivory_lucene_search:
     # Index identifier
-    indentifier1:
+    content:
         # Path to store the index (Required)
-        path: '%kernel.root_dir%/lucene/index'
+        path: '%kernel.root_dir%/lucene/content-index'
+        analyzer: ZendSearch\Lucene\Analysis\Analyzer\Common\TextNum\CaseInsensitive
+        
+    # Index identifier
+    contentTest:
+        # Path to store the index (Required)
+        path: '%kernel.root_dir%/lucene/content-test'
+        analyzer: ZendSearch\Lucene\Analysis\Analyzer\Common\TextNum\CaseInsensitive
