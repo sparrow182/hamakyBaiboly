@@ -9,3 +9,7 @@ defi_page_search_results:
 defi_page_ajax_load_chapters_by_book:
     path : /book/{bookId}/chapters
     defaults: { _controller: DefiPageBundle:Ajax:loadingChaptersByBook }
+    
+defi_page_ajax_load_verses_by_chapter:
+    path : /book/{bookId}/chapter/{chapterId}/verses/{verseStart}
+    defaults: { _controller: DefiPageBundle:Ajax:loadingVersesByChapter , verseStart : 1}

@@ -6,11 +6,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-
-
+use Defi\PageBundle\Form\EventListener\AddChapterFieldSubscriber;
+use Defi\PageBundle\Form\EventListener\AddVerseFieldSubscriber;
 /**
  * Holy Bible search Form
  *
@@ -18,33 +16,40 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
  */
 class BibleSearchType extends AbstractType {
     
+    private $em;
+    
+    public function __construct(\Doctrine\ORM\EntityManager $em) {
+        $this->em = $em;
+    }
+    
+    
     public function buildForm(FormBuilderInterface $builder, array $options) {
-        
+
         $builder
-            ->add('translation', EntityType::class, array(
-                'class' => 'DefiCommonBundle:Translation',
-                'choice_label' => 'title',
-                'required' => false
-            ))
+//            ->add('translation', EntityType::class, array(
+//                'class' => 'DefiCommonBundle:Translation',
+//                'choice_label' => 'title',
+//                'required' => false
+//            ))
             ->add('book', EntityType::class, array(
                 'class' => 'DefiCommonBundle:Book',
                 'choice_label' => 'nameMg',
                 'required' => false
-            ))
-            ->add('chapter', ChoiceType::class, array(
-                'required' => false
-            ))
-            ->add('verseStart', ChoiceType::class, array(
-                'required' => false
-            ))
-            ->add('verseEnd', ChoiceType::class, array(
-                'required' => false
-            ))
+        ));
+
+        $propertyPathToBook = 'book';
+
+        $builder
+            ->addEventSubscriber(new AddChapterFieldSubscriber($propertyPathToBook, $this->em))
+            ->addEventSubscriber(new AddVerseFieldSubscriber($propertyPathToBook, $this->em))
+        ;
+        
+        $builder
             ->add('freeSearch', TextType::class, array(
                 'required' => false
             ))
             ->add('search', SubmitType::class);
-        
+//        
     }
-    
+
 }

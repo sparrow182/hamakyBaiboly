@@ -74,6 +74,20 @@ class ContentRepository extends \Doctrine\ORM\EntityRepository {
                 ->setParameter('bookId', $bookId);
 
         return $qb->getQuery()->getSingleScalarResult();
-}
+    }
+    
+    public function getUpperBoundVerse($bookId, $chapterId) {
+        $qb = $this->createQueryBuilder('c');
+        $qb
+                ->select('MAX(c.verse) AS upper_verse')
+                ->where($qb->expr()->eq('c.book', ':bookId'))
+                ->andWhere($qb->expr()->eq('c.chapter', ':chapterId'))
+                ->setParameters(array(
+                    'bookId' => $bookId,
+                    'chapterId'=> $chapterId
+                ));
+        
+        return $qb->getQuery()->getSingleScalarResult();
+    }
 
 }
