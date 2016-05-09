@@ -9,12 +9,40 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
-        <section id="main">
+        <div id="main">
+            <header id="site-header">
+                <img src="{{ asset('images/bible.jpg') }}" width="200" style="vertical-align: middle; "/>
+                <h1 style="display: inline-block">Hamaky sy hizara ny Tenin'Andriamanitra</h1>
+                
+            </header>
+            
+            <nav id="main-menu" class="nav">
+                <ul>
+                    <li class="item"><a href="#teny-fanolorana" class="active" id="menu-intro">Teny fanolorana</a></li>
+                    <li class="item"><a href="#hamaky-baiboly" id="menu-search">Hamaky Baiboly</a></li>
+                    <li class="item"><a href="">Mana Isan'andro</a></li>
+                    <li class="item"><a href="">Perikaopa {{ 'now' | date('Y') }}</a></li>
+                </ul>
+            </nav>
+            
             {% block body %}{% endblock %}
-        </section>
+            
+            
+            <footer id="site-footer">
+                <p></p>
+                <ul>
+                    <li><a href="">Hifanerasera aminay - Hanome soso-kevitra hanatsarana ny pejy ?</a></li>
+                <ul>
+                
+                <p>Pejy namboarina tamin'ny Symfony 2.8 - Ho an'izay manam-paniriana handray anjara amin'ny fanavaozana sy fanintsiana ny "code source" dia mipetraka ao amin'ny github ihany koa izany : https://github.com/sparrow182/hamakyBaiboly </p>
+            </footer>
+        </div>
         {% block javascripts %}
             <script src="https://code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
             <script src="{{ asset('js/base.js') }}"></script>
+            <!-- Go to www.addthis.com/dashboard to customize your tools -->
+            <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-4f68ad160ccb75d6"></script>
+
         {% endblock %}
     </body> 
 </html>

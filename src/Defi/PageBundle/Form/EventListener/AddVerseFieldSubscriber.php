@@ -51,12 +51,16 @@ class AddVerseFieldSubscriber implements EventSubscriberInterface {
 
         $form->add('verseStart', ChoiceType::class, array(
             'required' => false,
-            'choices' => $verseStart
+            'choices' => $verseStart,
+            'placeholder' => '-- Andininy --',
+            'label' => false
         ));
 
         $form->add('verseEnd', ChoiceType::class, array(
             'required' => false,
-            'choices' => $verseEnd
+            'choices' => $verseEnd,
+            'placeholder' => "-- Hatramin'ny --",
+            'label' => false
         ));
     }
 

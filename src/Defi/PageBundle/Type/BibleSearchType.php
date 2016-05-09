@@ -34,7 +34,9 @@ class BibleSearchType extends AbstractType {
             ->add('book', EntityType::class, array(
                 'class' => 'DefiCommonBundle:Book',
                 'choice_label' => 'nameMg',
-                'required' => false
+                'placeholder' => '-- Boky --',
+                'required' => false,
+                'label' => false
         ));
 
         $propertyPathToBook = 'book';
@@ -46,7 +48,11 @@ class BibleSearchType extends AbstractType {
         
         $builder
             ->add('freeSearch', TextType::class, array(
-                'required' => false
+                'required' => false,
+                'label' => false,
+                'attr' => array(
+                    'placeholder' => 'Hitady teny manokana'
+                )
             ))
             ->add('search', SubmitType::class);
 //        
