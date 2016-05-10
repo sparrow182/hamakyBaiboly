@@ -77,8 +77,8 @@
                 {% endfor %}
             {% endif %}
             
-            <h3>Zarao amin'ireo olona manodidina anao : </h3>
-            <!-- Go to www.addthis.com/dashboard to customize your tools -->
+            <h3>Hizara ny Teny : </h3>
+            <p>Zarao amin'ny olona rehetra manodidina anao ny Teny izay avy novakianao mba ahazahoan'izy ireo mamaky sy miaina izany Tenin'Andriamanitra izany koa. Misafidiana amin'ny tamba-jotra sosialy (réseaux sociaux) fampiasanao izay voatanisa eo ambany </p>
             <div class="addthis_sharing_toolbox"></div>
         {% endif %}
         
@@ -160,7 +160,7 @@
             
             {% if searchResults is defined and searchResults | length > 0 %}
                 $('html, body').animate({
-                    scrollTop: $("#search-results").offset().top
+                    scrollTop: $("#search-results").offset().top - 80
                 }, 1000);
             {% endif %}
         });
