@@ -45,7 +45,9 @@ class AddChapterFieldSubscriber implements EventSubscriberInterface {
 
         $form->add('chapter', ChoiceType::class, array(
             'required' => false,
-            'choices' => $chapters
+            'choices' => $chapters,
+            'placeholder' => 'Toko',
+            'label' => false
         ));
     }
 

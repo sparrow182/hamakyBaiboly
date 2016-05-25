@@ -1,30 +1,98 @@
 {% extends "base.html.twig" %}
 
+{% form_theme formSearch _self %}
+
+{%- block form_row -%}
+    <div class="inline-block">
+        {{- form_label(form) -}}
+        {{- form_errors(form) -}}
+        {{- form_widget(form) -}}
+    </div>
+{%- endblock form_row -%}
+
+{%- block button_row -%}
+    <div class="inline-block">
+        {{- form_widget(form) -}}
+    </div>
+{%- endblock button_row -%}
+
 {% block body %}
     
-    {{ form_start(formSearch) }}
-        {{ form_row(formSearch.book) }}
-        {{ form_row(formSearch.chapter) }}
-        {{ form_row(formSearch.verseStart) }}
-        {{ form_row(formSearch.verseEnd) }}
-        {{ form_row(formSearch.freeSearch) }}
-    {{ form_end(formSearch) }}
+    <h2 id="intro-header">Teny fanolorana</h2>
     
-    {{ form(formSearch) }}        {{ form_rest(formSearch) }}
+    <p>Quod opera consulta cogitabatur astute, ut hoc insidiarum genere Galli periret avunculus, ne eum ut praepotens acueret in fiduciam exitiosa coeptantem. verum navata est opera diligens hocque dilato Eusebius praepositus cubiculi missus est Cabillona aurum secum perferens, quo per turbulentos seditionum concitores occultius distributo et tumor consenuit militum et salus est in tuto locata praefecti. deinde cibo abunde perlato castra die praedicto sunt mota.</p>
+    
+    <section id="search-form">
+        
+        <h2>Hamaky Baiboly</h2>
+        
+        <p>Auxerunt haec vulgi sordidioris audaciam, quod cum ingravesceret penuria commeatuum, famis et furoris inpulsu Eubuli cuiusdam inter suos clari domum ambitiosam ignibus subditis inflammavit rectoremque ut sibi iudicio imperiali addictum calcibus incessens et pugnis conculcans seminecem laniatu miserando discerpsit. post cuius lacrimosum interitum in unius exitio quisque imaginem periculi sui considerans documento recenti similia formidabat.</p>
+        
+        {{ form_start(formSearch) }}
+            {{ form_row(formSearch.book) }}
+            {{ form_row(formSearch.chapter) }} :
+            {{ form_row(formSearch.verseStart) }} -
+            {{ form_row(formSearch.verseEnd) }}
+            {{ form_row(formSearch.freeSearch) }}
+            {{ form_row(formSearch.search) }}
+            <img id="search-loader" src="{{ asset('images/bible_search.gif') }}" />
+            {{ form_end(formSearch) }}
 
-
-    <section>
+        {{ form_rest(formSearch) }}
+    </section>
+    
+    <section id="search-results">
         {% if searchResults is defined and searchResults | length > 0 %}
-            <h2>{{ 'search.result' | trans }}</h2>
+            <h3>{{ 'search.result' | trans }}</h3>
             
             {% if formData.book is not empty %}
-                <h3>{{ 'search.book' | trans }} : {{ formData.book ? formData.book.nameMg : "" }}</h3>
+                <h3>
+                    {{ 'search.book' | trans }} : 
+                    {{ formData.book ? formData.book.nameMg : "" }} 
+                    {{ formData.chapter ? formData.chapter : '' }}
+                    {{ formData.verseStart ? ":" ~ formData.verseStart : '' }}
+                    {{ formData.verseStart and formData.verseEnd ? "-" ~ formData.verseEnd : '' }}
+                    
+                    {{ formData.freeSearch ? 'ahitana ny teny hoe : ' ~ '"' ~ formData.freeSearch  ~ '"' : '' }}
+                </h3>
             {% endif %}
 
-            {% for content in searchResults %}
-                <p><strong>{{ content.book.nameMg }} {{ content.chapter }}:</strong>{{ content.verse }}<strong>.</strong> {{ content.text }}</p>
-            {% endfor %}
+            {% if formData.book %}
+                <blockquote>
+                    {% for content in searchResults %}
+                        <p>
+                            <strong class="mark {{ content.book.part.id == 2 ? 'new' : '' }}">
+                                {{ formData.chapter ? "" : content.chapter ~ ':' }} 
+                                {{ content.verse }}
+                            </strong> 
+                            {{ content.text }}
+                        </p>
+                    {% endfor %}
+                </blockquote>
+            {% else %}
+                {% for content in searchResults %}
+                    <blockquote>
+                        <strong class="mark {{ content.book.part.id == 2 ? 'new' : '' }}">{{ content.book.nameMg }} {{ content.chapter }}:{{ content.verse }}</strong> {{ content.text }}
+                    </blockquote>
+                {% endfor %}
+            {% endif %}
+            
+            <h3>Hizara ny Teny : </h3>
+            <p>Zarao amin'ny olona rehetra manodidina anao ny Teny izay avy novakianao mba ahazahoan'izy ireo mamaky sy miaina izany Tenin'Andriamanitra izany koa. Misafidiana amin'ny tamba-jotra sosialy (réseaux sociaux) fampiasanao izay voatanisa eo ambany </p>
+            <div class="addthis_sharing_toolbox"></div>
         {% endif %}
+        
+        
+        <article>
+            <h2 id="daily-text-header">Mana isan'andro</h2>
+            <p>Et quia Mesopotamiae tractus omnes crebro inquietari sueti praetenturis et stationibus servabantur agrariis, laevorsum flexo itinere Osdroenae subsederat extimas partes, novum parumque aliquando temptatum commentum adgressus. quod si impetrasset, fulminis modo cuncta vastarat. erat autem quod cogitabat huius modi.<p>
+        </article>
+        
+        <article>
+            <h2 id="calendar-header">Perikaopa {{ 'now' | date('Y') }}</h2>
+            <p>Quam ob rem id primum videamus, si placet, quatenus amor in amicitia progredi debeat. Numne, si Coriolanus habuit amicos, ferre contra patriam arma illi cum Coriolano debuerunt? num Vecellinum amici regnum adpetentem, num Maelium debuerunt iuvare?</p>
+        </article>
+        
     </section>
 
 {% endblock %}
@@ -40,7 +108,7 @@
                 
                 return $.ajax({
                     url: targetURL,
-                    type: "get",
+                    type: "get"
                 });
             }
 
@@ -66,7 +134,6 @@
                     loadAjaxContent(path).done(function(data) {
                         $('#bible_search_verseStart').html(data);
                         $('#bible_search_verseEnd').empty();
-                        
                     });
                 }
                 
@@ -85,9 +152,17 @@
                         $('#bible_search_verseEnd').html(data);
                     });
                 }
-                
             });
-
+            
+            $(document).on('click', '#bible_search_search', function(e) {
+                $('#search-loader').show();
+            });
+            
+            {% if searchResults is defined and searchResults | length > 0 %}
+                $('html, body').animate({
+                    scrollTop: $("#search-results").offset().top - 80
+                }, 1000);
+            {% endif %}
         });
     </script>
 

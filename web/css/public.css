@@ -1,21 +1,159 @@
-/*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
-/* 
-    Created on : 23 avr. 2016, 20:23:04
-    Author     : sparrow
-*/
-
-#main {
-    width: 100%; 
-    height: 100%; 
-    left: 0px; 
-    top: 0px; 
+body {
+    background: url(../images/sky-8-min.jpg);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-color: #71A5EE;
 }
 
-.stretch {
-    width:100%;
-    height:100%;
+html{font-size:100%;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;  height: 100%;}
+
+html,button,input,select,textarea{font-family: sans-serif}
+
+h1{font-size:2em;margin:.67em 0}h2{font-size:1.6em;margin:.83em 0}h3{font-size:1.17em;margin:1em 0}b,strong{font-weight:700}p,pre{margin:1em 0}pre,code{font-family:monospace,serif;font-size:1em}pre{font-family:Consolas,"Bitstream Vera Sans Mono","Courier New",Courier,monospace;white-space:pre;white-space:pre-wrap;word-wrap:break-word;margin:0 0 15px;padding:15px 40px 1px 42px;line-height:14px;background:#fbfbfb;border-top:1px solid #e6e6e6;border-bottom:1px solid #e6e6e6}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline;color:#555}sup{top:-.5em}sub{bottom:-.25em}dl,ol,ul{margin:1em 0}dd{margin:0 0 0 40px}ol,ul{padding:0 0 0 40px}nav ul,nav ol{list-style:none;list-style-image:none}img{border:0;-ms-interpolation-mode:bicubic}figure{margin:0}form{margin:0}fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}legend{border:0;padding:0;white-space:normal;*margin-left:-7px}button,input,select,textarea{font-size:100%;margin:0;vertical-align:baseline;*vertical-align:middle}button,input{line-height:normal}button,input[type=button],input[type=reset],input[type=submit]{cursor:pointer;-webkit-appearance:button;*overflow:visible}button[disabled],input[disabled]{cursor:default}input[type=checkbox],input[type=radio]{box-sizing:border-box;padding:0;*height:13px;*width:13px}input[type=search]{-webkit-appearance:textfield;-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box}input[type=search]::-webkit-search-decoration,input[type=search]::-webkit-search-cancel-button{-webkit-appearance:none}button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}textarea{overflow:auto;vertical-align:top}table{border-collapse:collapse;border-spacing:0}.cf:before,.cf:after{content:"";display:table}
+
+
+html {
+    font-family: serif !important;
+}
+
+h2 {
+    font-family: arial;
+}
+
+#main {
+    width: 80%; 
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    opacity: 0.8;
+    height: 100%;
+}
+
+#site-header {
+    text-align: center; 
+    margin-bottom: 20px;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+#search-loader {
+    display: none;
+    vertical-align: middle;
+}
+
+#bible_search_search {
+    background: #055EC2;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    color: #fff;
+}
+
+.mark {
+    background: #ffcc00;
+    padding: 5px;
+    border-radius : 3px;
+}
+.mark.new {
+    background: #6d6 !important;
+}
+
+#search-form select, #bible_search_freeSearch{
+    padding: 5px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+}
+
+
+
+blockquote {
+    background: #f9f9f9;
+    border-left: 10px solid #ccc;
+    margin: 1.5em 10px;
+    padding: 0.5em 10px;
+    quotes: "\201C""\201D""\2018""\2019";
+    line-height: 1.5em !important;
+    font-style: italic;
+}
+
+blockquote:before {
+    content:"\201D";
+}
+blockquote:before {
+    color: #ccc;
+    content:"\201C";
+    font-size: 4em;
+    line-height: 0.1em;
+    margin-right: 0.25em;
+    vertical-align: -0.4em;
+}
+blockquote p {
+    display: inline;
+    line-height: 1.5em;
+}
+
+/* MENU */
+.nav{ margin: 0 -20px }
+
+.nav ul {
+  list-style: none;
+  background-color: #444;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
+.nav li {
+  font-family: sans-serif;
+  font-size: 1.2em;
+  border-bottom: 1px solid #888;
+}
+ 
+.nav a {
+  text-decoration: none;
+  color: #fff;
+  display: block;
+  transition: .3s background-color;
+}
+ 
+.nav a:hover {
+  background-color: #055EC2;
+}
+ 
+.nav a.active {
+  background-color: #055EC2;;
+}
+ 
+@media screen and (min-width: 600px) {
+  .nav li {
+    width: 190px;
+    border-bottom: none;
+    height: 30px;
+    line-height: 30px;
+    font-size: 1.4em;
+  }
+ 
+  /* Option 1 - Display Inline */
+  .nav li {
+    display: inline-block;
+    margin-right: -4px;
+  }
+}
+
+.fixed{  /* To fix main menu container */
+    z-index: 9999;
+    position: fixed !important;
+    left: 0;
+    top: 0;
+    width: 100% !important;
+}
+
+#site-footer {
+    background: #000;
+    padding: 5px;
+    opacity: 0.9;
+    color: #fff;
+    margin: 30px -20px -20px -20px;
+    text-align: center;
 }
