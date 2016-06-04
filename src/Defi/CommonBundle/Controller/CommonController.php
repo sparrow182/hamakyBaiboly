@@ -8,16 +8,28 @@
 
 namespace Defi\CommonBundle\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
 /**
  * Description of CommonController
  *
  * @author sparrow
  */
-class CommonController extends \Symfony\Bundle\FrameworkBundle\Controller\Controller {
+class CommonController extends Controller {
     
-    private $commonParams;
+    protected $viewParams;
     
-    public function loadCommonParams() {
+    public function preExecute() {
+        
+        $em = $this->container->get("doctrine.orm.entity_manager");
+        $bookRepository = $em->getRepository('DefiCommonBundle:Book');
+        $partRepository = $em->getRepository('DefiCommonBundle:Part');
+        $parts = $partRepository->findAll();
+        $this->viewParams['parts'] = $parts;
+        
+        foreach ($parts as $part) {
+            $this->viewParams['books'][$part->getId()] = $bookRepository->findByPart($part->getId());
+        }
         
     }
     

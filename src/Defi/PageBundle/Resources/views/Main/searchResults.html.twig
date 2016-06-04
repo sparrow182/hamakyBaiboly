@@ -1,8 +1,187 @@
 {% extends "base.html.twig" %}
 
+{% form_theme formSearch _self %}
+
+{%- block form_row -%}
+    <div class="inline-block">
+        {{- form_label(form) -}}
+        {{- form_errors(form) -}}
+        {{- form_widget(form) -}}
+    </div>
+{%- endblock form_row -%}
+
+{%- block button_row -%}
+    <div class="inline-block">
+        {{- form_widget(form) -}}
+    </div>
+{%- endblock button_row -%}
+
 {% block body %}
-    <h1>Miarahaba anao</h1>
     
-     {{ form(formSearch) }}
+    <section id="search-form">
+        
+        <h2>Hamaky Baiboly</h2>
+        
+        <p>Auxerunt haec vulgi sordidioris audaciam, quod cum ingravesceret penuria commeatuum, famis et furoris inpulsu Eubuli cuiusdam inter suos clari domum ambitiosam ignibus subditis inflammavit rectoremque ut sibi iudicio imperiali addictum calcibus incessens et pugnis conculcans seminecem laniatu miserando discerpsit. post cuius lacrimosum interitum in unius exitio quisque imaginem periculi sui considerans documento recenti similia formidabat.</p>
+        
+        {{ form_start(formSearch) }}
+            {{ form_row(formSearch.book) }}
+            {{ form_row(formSearch.chapter) }} :
+            {{ form_row(formSearch.verseStart) }} -
+            {{ form_row(formSearch.verseEnd) }}
+            {{ form_row(formSearch.freeSearch) }}
+            {{ form_row(formSearch.search) }}
+            <img id="search-loader" src="{{ asset('images/bible_search.gif') }}" />
+            {{ form_end(formSearch) }}
+
+        {{ form_rest(formSearch) }}
+    </section>
     
+    <section id="search-results">
+        {% if searchResults is defined and searchResults | length > 0 %}
+            <h3>{{ 'search.result' | trans }}</h3>
+            
+            {% if book is not empty %}
+                <h3>
+                    {{ 'search.book' | trans }} : 
+                    {{ book ? book.nameMg : "" }} 
+                    {{ chapter ? chapter : '' }}
+                    {{ verseStart ? ":" ~ verseStart : '' }}
+                    {{ verseStart and verseEnd ? "-" ~ verseEnd : '' }}
+                    
+                    {{ freeSearch ? 'ahitana ny teny hoe : ' ~ '"' ~ freeSearch  ~ '"' : '' }}
+                </h3>
+            {% endif %}
+
+            {% if formData and formData.book  %}
+                <blockquote>
+                    {% for content in searchResults %}
+                        <p>
+                            <strong class="mark {{ content.book.part.id == 2 ? 'new' : '' }}">
+                                {{ formData.chapter ? "" : content.chapter ~ ':' }} 
+                                {{ content.verse }}
+                            </strong> 
+                            {{ content.text }}
+                        </p>
+                    {% endfor %}
+                </blockquote>
+            {% else %}
+                {% for content in searchResults %}
+                    <blockquote>
+                        <strong class="mark {{ content.book.part.id == 2 ? 'new' : '' }}">{{ content.book.nameMg }} {{ content.chapter }}:{{ content.verse }}</strong> {{ content.text }}
+                    </blockquote>
+                {% endfor %}
+            {% endif %}
+            
+            <h3>Hizara ny Teny : </h3>
+            <p>Zarao amin'ny olona rehetra manodidina anao ny Teny izay avy novakianao mba ahazahoan'izy ireo mamaky sy miaina izany Tenin'Andriamanitra izany koa. Misafidiana amin'ny tamba-jotra sosialy (réseaux sociaux) fampiasanao izay voatanisa eo ambany </p>
+            <div class="addthis_sharing_toolbox"></div>
+        {% endif %}
+        
+    </section>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        
+        $(function () {
+            
+            function loadAjaxContent(targetURL) {
+                
+                return $.ajax({
+                    url: targetURL,
+                    type: "get"
+                });
+            }
+
+            $('#bible_search_book').change(function (e) {
+                
+                if ($(this).val()) {
+                    var path = '{{ path('defi_page_ajax_load_chapters_by_book', { bookId : 'bid' }) }}';
+                    path = path.replace('bid', $(this).val());
+                    $('#search-loader').show();
+
+                    loadAjaxContent(path).done(function (data) {
+                        $('#bible_search_chapter').html(data).change();
+                        $('#search-loader').hide();
+                    });
+                }
+            });
+            
+            $(document).on('change', '#bible_search_chapter', function(e){
+                var bookId = $('#bible_search_book').val();
+                
+                if ($(this).val() && bookId) {
+                    $('#search-loader').show();
+                    var path = '{{ path('defi_page_ajax_load_verses_by_chapter', { bookId : 'bid', chapterId : 'cid' }) }}';
+                    path = path.replace('bid', bookId).replace('cid', $(this).val());
+                    
+                    loadAjaxContent(path).done(function(data) {
+                        $('#bible_search_verseStart').html(data);
+                        
+                        {% if verseStart is defined %}
+                            $('#bible_search_verseStart').val({{ verseStart }}).change();
+                        {% endif %}
+                        
+                        $('#bible_search_verseEnd').empty();
+                        $('#search-loader').hide();
+                    });
+                }
+                
+            });
+            
+            $(document).on('change', '#bible_search_verseStart', function(e){
+                var bookId = $('#bible_search_book').val();
+                var chapterId = $('#bible_search_chapter').val();
+                var verseStart = $(this).val();
+                
+                if (verseStart && chapterId && bookId) {
+                    $('#search-loader').show();
+                    var path = '{{ path('defi_page_ajax_load_verses_by_chapter', { bookId : 'bid', chapterId : 'cid', verseStart : 'start' }) }}';
+                    path = path.replace('bid', bookId).replace('cid', chapterId).replace('start', verseStart);
+                    
+                    loadAjaxContent(path).done(function(data) {
+                        $('#bible_search_verseEnd').html(data);
+                        
+                        {% if verseEnd is defined %}
+                            $('#bible_search_verseEnd').val({{ verseEnd }});
+                        {% endif %}
+                        
+                        $('#search-loader').hide();
+                    });
+                }
+            });
+            
+            $(document).on('click', '#bible_search_search', function(e) {
+                $('#search-loader').show();
+            });
+            
+            {% if searchResults is defined and searchResults | length > 0 %}
+                $('html, body').animate({
+                    scrollTop: $("#search-results").offset().top - 80
+                }, 1000);
+            {% endif %}
+                
+            
+            {% if book %}
+                $('#bible_search_book').val({{ book.id }});
+                var path = '{{ path('defi_page_ajax_load_chapters_by_book', { bookId : book.id }) }}';
+                $('#search-loader').show();
+
+                var promise = loadAjaxContent(path).done(function (data) {
+                    $('#bible_search_chapter').html(data);
+                }).done(function() {
+                    $('#bible_search_chapter').val({{ chapter }}).trigger('change');
+                });
+            {% endif %}
+            
+            {% if freeSearch is defined %}
+                $('#bible_search_freeSearch').val('{{ freeSearch }}').trigger('change');
+            {% endif %}
+        });
+    </script>
+
 {% endblock %}

@@ -80,3 +80,8 @@ ivory_lucene_search:
         # Path to store the index (Required)
         path: '%kernel.root_dir%/lucene/content-test'
         analyzer: ZendSearch\Lucene\Analysis\Analyzer\Common\TextNum\CaseInsensitive
+        
+fos_user:
+    db_driver: orm 
+    firewall_name: main
+    user_class:  Defi\ManagerBundle\Entity\User

@@ -15,7 +15,6 @@
             <header id="site-header">
                 <img src="{{ asset('images/bible.jpg') }}" width="200" style="vertical-align: middle; "/>
                 <h1 style="display: inline-block">Hamaky sy hizara ny Tenin'Andriamanitra</h1>
-                
             </header>
             
             <nav id="main-menu" class="nav">
@@ -32,9 +31,17 @@
             
             <footer id="site-footer">
                 
+                {% for part in parts %}
                 <section>
+                    <h2 class="mark {{ part.id == 2 ? 'new' : '' }}">{{ part.name }}</h2>
+                    <ul>
+                        {% for book in books[part.id] %}
+                            <li><a href="{{ path('defi_page_bible_search_results', { bookName : book.nameMg | slugify, bookId : book.id, chapter : 0, verseStart : 0, verseEnd : 0 } ) }}">{{ book.nameMg }}</a></li>
+                        {% endfor %}
+                    </ul>
                 </section>
-                
+                {% endfor %}
+                <div class="clear"></div>
             </footer>
         </div>
         {% block javascripts %}

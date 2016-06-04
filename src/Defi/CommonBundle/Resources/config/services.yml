@@ -1,4 +1,11 @@
 services:
-#    defi_common.example:
-#        class: Defi\CommonBundle\Example
-#        arguments: ["@service_id", "plain_value", %parameter%]
+    controller.pre_execute_listener:
+        class: Defi\CommonBundle\EventListener\ControllerListener
+        tags:
+            -  { name: kernel.event_listener, event: kernel.controller, method: onCoreController }
+      
+    app.twig_extension:
+        class: Defi\CommonBundle\Twig\AppTwigExtension
+        public: false
+        tags:
+            - { name: twig.extension }

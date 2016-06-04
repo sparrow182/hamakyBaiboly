@@ -117,9 +117,11 @@
                 if ($(this).val()) {
                     var path = '{{ path('defi_page_ajax_load_chapters_by_book', { bookId : 'bid' }) }}';
                     path = path.replace('bid', $(this).val());
+                    $('#search-loader').show();
 
                     loadAjaxContent(path).done(function (data) {
                         $('#bible_search_chapter').html(data);
+                        $('#search-loader').hide();
                     });
                 }
             });
@@ -128,12 +130,14 @@
                 var bookId = $('#bible_search_book').val();
                 
                 if ($(this).val() && bookId) {
+                    $('#search-loader').show();
                     var path = '{{ path('defi_page_ajax_load_verses_by_chapter', { bookId : 'bid', chapterId : 'cid' }) }}';
                     path = path.replace('bid', bookId).replace('cid', $(this).val());
                     
                     loadAjaxContent(path).done(function(data) {
                         $('#bible_search_verseStart').html(data);
                         $('#bible_search_verseEnd').empty();
+                        $('#search-loader').hide();
                     });
                 }
                 
@@ -145,11 +149,13 @@
                 var verseStart = $(this).val();
                 
                 if (verseStart && chapterId && bookId) {
+                    $('#search-loader').show();
                     var path = '{{ path('defi_page_ajax_load_verses_by_chapter', { bookId : 'bid', chapterId : 'cid', verseStart : 'start' }) }}';
                     path = path.replace('bid', bookId).replace('cid', chapterId).replace('start', verseStart);
                     
                     loadAjaxContent(path).done(function(data) {
                         $('#bible_search_verseEnd').html(data);
+                        $('#search-loader').hide();
                     });
                 }
             });

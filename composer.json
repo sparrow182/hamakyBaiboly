@@ -29,7 +29,9 @@
         "incenteev/composer-parameter-handler": "~2.0",
         "egeloen/lucene-search-bundle": "~1.0",
         "zendframework/zendsearch": "dev-master",
-        "friendsofsymfony/user-bundle": "~2.0@dev"
+        "friendsofsymfony/user-bundle": "~2.0@dev",
+        "cocur/slugify": "^2.1",
+        "stof/doctrine-extensions-bundle": "^1.2"
     },
     "require-dev": {
         "sensio/generator-bundle": "~3.0",

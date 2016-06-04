@@ -19,6 +19,7 @@ class AppKernel extends Kernel
             new Defi\CommonBundle\DefiCommonBundle(),
             new Defi\PageBundle\DefiPageBundle(),
             new Defi\ManagerBundle\DefiManagerBundle(),
+            new FOS\UserBundle\FOSUserBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {
